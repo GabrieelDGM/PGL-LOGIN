@@ -1,5 +1,4 @@
-// src/services/apiService.ts
-const API_BASE_URL = "http://192.168.X.Y:5000"; 
+const API_BASE_URL = "http://192.168.X.Y:5000"; // Cambia por la IP del profe
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 
@@ -27,5 +26,6 @@ export async function apiFetch<T>(
     const msg = data?.message || `Error ${res.status}`;
     throw new Error(msg);
   }
+
   return data as T;
 }

@@ -1,3 +1,4 @@
+
 import { apiFetch } from "./apiService";
 
 export type RegisterPayload = { fullname: string; email: string; pswd: string };
@@ -11,6 +12,7 @@ export function register(payload: RegisterPayload) {
 export function login(payload: LoginPayload) {
   return apiFetch<LoginResponse>("/auth/login", { method: "POST", body: payload });
 }
+
 
 export function getWelcomeMessage(token: string) {
   return apiFetch<{ message: string }>("/welcome", { method: "GET", token });
