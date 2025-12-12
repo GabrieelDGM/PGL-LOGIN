@@ -1,6 +1,6 @@
 # 📱 PGL-LOGIN
 
-1. Introducción
+# Introducción
 Este proyecto consiste en una aplicación móvil desarrollada con React Native y Expo Router, conectada a un backend hecho en Visual Studio (.NET).
 
 # La aplicación permite al usuario:
@@ -9,12 +9,12 @@ Este proyecto consiste en una aplicación móvil desarrollada con React Native y
 * Acceder a un mensaje de bienvenida usando un token JWT
 * Navegar por pantallas como Portada, Portfolio y Lista de Animes
 
-1. Objetivos
-* 2.1 Implementar un flujo de autenticación con registro y login. 
-* 2.2 Guardar y recuperar el token JWT en el almacenamiento local. 
-* 2.3 Mostrar un mensaje de bienvenida protegido por autenticación. 
-* 2.4 Diseñar una estructura de navegación clara con Drawer y pantallas principales. 
-* 2.5 Crear una interfaz amigable con Portada, Portfolio y Lista de Animes.
+# Objetivos
+* Implementar un flujo de autenticación con registro y login. 
+* Guardar y recuperar el token JWT en el almacenamiento local. 
+*  Mostrar un mensaje de bienvenida protegido por autenticación. 
+*  Diseñar una estructura de navegación clara con Drawer y pantallas principales. 
+*  Crear una interfaz amigable con Portada, Portfolio y Lista de Animes.
 
 # Estructura del Proyecto
 ![ESTRUCTURA](./docs/image/estructura.png)
@@ -28,17 +28,17 @@ Este proyecto consiste en una aplicación móvil desarrollada con React Native y
 * Lista de Animes (list.tsx): listado de animes.
 
 # Servicios
-*5.1* apiService.ts: configura la URL base del backend y gestiona llamadas HTTP.
-*5.2* authService.ts: funciones para registro, login y bienvenida.
-*5.3 *storageService.ts: guarda, recupera y elimina el token JWT en AsyncStorage.
+* apiService.ts: configura la URL base del backend y gestiona llamadas HTTP.
+* authService.ts: funciones para registro, login y bienvenida.
+* storageService.ts: guarda, recupera y elimina el token JWT en AsyncStorage.
 
 # Flujo de la Aplicación
-*6.1* El usuario abre la app → se muestra Login. 
-*6.2* Puede registrarse en Registro → tras éxito entra a Portfolio. 
-*6.3* Si inicia sesión → se guarda token y se redirige a Bienvenida. 
-*6.4* En Bienvenida se muestra mensaje del backend. s
-*6.5* El Drawer permite navegar entre Portada, Portfolio y Lista de Animes. 
-*6.6* Al cerrar sesión se borra el token y se vuelve a Login.
+* El usuario abre la app → se muestra Login. 
+* Puede registrarse en Registro → tras éxito entra a Portfolio. 
+* Si inicia sesión → se guarda token y se redirige a Bienvenida. 
+* En Bienvenida se muestra mensaje del backend. s
+* El Drawer permite navegar entre Portada, Portfolio y Lista de Animes. 
+* Al cerrar sesión se borra el token y se vuelve a Login.
 
 # Contenido extra
 [EjercicioUno](./docs/EjercicioUno.md)
