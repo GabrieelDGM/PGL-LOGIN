@@ -2,24 +2,33 @@ import { Drawer } from "expo-router/drawer";
 
 export default function RootLayout() {
   return (
-    <Drawer screenOptions={{ headerShown: true }}>
+    <Drawer
+      screenOptions={{
+        headerShown: true,
+      }}
+    >
+      {}
       <Drawer.Screen
-        name="index"
-        options={{ title: "Portada" }}
-          
-        
+        name="bienvenida/portada"
+        options={{
+          title: "Portada",
+        }}
       />
 
+      {}
       <Drawer.Screen
         name="tabs"
-        options={{ title: "Portfolio" }}
-        // para ocultar un archivo seria
-        // drawerItemStyle = {Display: 'none'}
+        options={{
+          title: "Portfolio",
+        }}
       />
 
+      {}
       <Drawer.Screen
         name="list"
-        options={{ title: "Lista de Animes" }}
+        options={{
+          title: "Lista de Animes",
+        }}
       />
     </Drawer>
   );
