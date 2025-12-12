@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { View, Text, TextInput, Alert, Pressable, StyleSheet } from "react-native";
 import { router } from "expo-router";
-import { register } from "../services/authService";
-import { isValidEmail, isStrongPassword, notEmpty } from "../services/validation";
+import { register } from ".././src/services/authService";
+import { isValidEmail, isStrongPassword, notEmpty } from ".././src/services/validation";
 
 export default function RegisterScreen() {
   const [fullname, setFullname] = useState("");

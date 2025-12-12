@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://192.168.X.Y:5000"; // Cambia por la IP del profe
+const API_BASE_URL = "http://192.168.X.Y:5000";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 

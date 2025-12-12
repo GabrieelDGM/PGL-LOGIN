@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { View, Text, TextInput, Alert, Pressable, StyleSheet } from "react-native";
 import { router } from "expo-router";
-import { login } from "../services/authService";
-import { saveToken } from "../services/storageService";
-import { isValidEmail, notEmpty } from "../services/validation";
+import { login } from ".././src/services/authService";
+import { saveToken } from ".././src/services/storageService";
+import { isValidEmail, notEmpty } from ".././src/services/validation";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -49,7 +49,7 @@ export default function LoginScreen() {
         style={styles.input}
       />
 
-      {/* BOTÓN PERSONALIZADO */}
+      {}
       <Pressable style={styles.button} onPress={handleLogin} disabled={loading}>
         <Text style={styles.buttonText}>{loading ? "Entrando..." : "Entrar"}</Text>
       </Pressable>
