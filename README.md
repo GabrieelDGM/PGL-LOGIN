@@ -43,3 +43,43 @@ Este proyecto consiste en una aplicación móvil desarrollada con React Native y
 # Contenido extra
 [EjercicioUno](./docs/EjercicioUno.md)
 [EjercicioDos](./docs/EjercicioDos.md)
+
+# Frontend (React Native + Expo)
+
+Asegúrate de estar dentro de la carpeta del proyecto móvil (donde está el package.json).
+
+▶️ Instalar dependencias
+npm install
+
+▶️ Ejecutar la app
+npm start
+
+
+Esto abrirá Expo.
+Desde ahí puedes lanzar la app en:
+
+Android → presiona a
+
+iOS → presiona i (solo en macOS)
+
+Web → presiona w
+
+📲 3. Ejecutar la app en un dispositivo físico
+
+Necesitas la app Expo Go:
+
+Android → Google Play
+
+iOS → App Store
+
+Luego escaneas el QR que aparece en la consola o en la ventana de Expo.
+
+🔧 Otros comandos útiles
+Limpiar caché de Expo (si falla algo)
+npm start -- --clear
+
+Instalar Expo CLI global (opcional)
+npm install -g expo-cli
+
+Actualizar dependencias de Expo
+npx expo install
