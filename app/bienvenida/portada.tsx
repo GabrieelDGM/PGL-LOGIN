@@ -1,21 +1,99 @@
-import { Link } from "expo-router";
-import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useEffect, useState } from "react";
+import {
+  ImageBackground,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
+import { Link, router } from "expo-router";
+import { getToken, removeToken } from "../../src/services/storageService";
+import { getWelcomeMessage } from "../../src/services/authService";
 
-export default function portada() {
+export default function Portada() {
+  const [checking, setChecking] = useState(true);
+  const [loadingMsg, setLoadingMsg] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const token = await getToken();
+      if (!token) {
+        router.replace("/login");
+        return;
+      }
+      setChecking(false);
+    })();
+  }, []);
+
+  async function handleCheckToken(): Promise<void> {
+    setLoadingMsg(true);
+    try {
+      const token = await getToken();
+      if (!token) {
+        Alert.alert("Sesión", "No hay token. Vuelve a iniciar sesión");
+        router.replace("/login");
+        return;
+      }
+      const message = await getWelcomeMessage(token);
+      Alert.alert("Mensaje del servidor", message);
+    } catch (e) {
+      const message = e instanceof Error ? e.message : String(e);
+      Alert.alert("Error", message || "No se pudo comprobar el token");
+    } finally {
+      setLoadingMsg(false);
+    }
+  }
+
+  async function handleLogout(): Promise<void> {
+    Alert.alert(
+      "Cerrar sesión",
+      "¿Seguro que quieres cerrar sesión?",
+      [
+        { text: "Cancelar", style: "cancel" },
+        {
+          text: "Cerrar sesión",
+          style: "destructive",
+          onPress: async () => {
+            await removeToken();
+            router.replace("/login");
+          },
+        },
+      ]
+    );
+  }
+
+  if (checking) {
+    return (
+      <View style={styles.loading}>
+        <ActivityIndicator size="large" color="#a42121" />
+      </View>
+    );
+  }
+
   return (
     <ImageBackground
       source={require("./image/portada.jpg")}
       style={styles.background}
       resizeMode="cover"
     >
+      <View style={styles.overlay} />
       <View style={styles.container}>
-
-        <Text style={styles.header}>Bienvenido a mi aplicacion digamos que esta bien creada, disfruta</Text>
-
+        <Text style={styles.header}>¡Bienvenido!</Text>
         <Text style={styles.subtitle}>
-            Aqui veras mi lista de hobbies y algunas cositas mas explora por tu cuenta...
-          
+          Has iniciado sesión correctamente. Explora la app desde el menú lateral.
         </Text>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleCheckToken}
+          disabled={loadingMsg}
+        >
+          <Text style={styles.buttonText}>
+            {loadingMsg ? "Comprobando..." : "Comprobar token"}
+          </Text>
+        </TouchableOpacity>
 
         <Link href="/tabs" asChild>
           <TouchableOpacity style={styles.button}>
@@ -23,12 +101,24 @@ export default function portada() {
           </TouchableOpacity>
         </Link>
 
+        <TouchableOpacity
+          style={[styles.button, styles.logoutButton]}
+          onPress={handleLogout}
+        >
+          <Text style={styles.buttonText}>Cerrar sesión</Text>
+        </TouchableOpacity>
       </View>
     </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  loading: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f5f6fa",
+  },
   background: {
     flex: 1,
     width: "100%",
@@ -36,37 +126,46 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0,0,0,0.35)",
+  },
   container: {
     alignItems: "center",
     paddingHorizontal: 30,
+    width: "100%",
   },
   header: {
-    fontSize: 40,
-    fontWeight: "bold",
-    color: "#fff",
+    fontSize: 38,
+    fontWeight: "800",
+    color: "#ffffff",
     textAlign: "center",
     textShadowColor: "#000",
-    textShadowOffset: { width: 3, height: 3 },
+    textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 5,
-    marginBottom: 15,
+    marginBottom: 12,
   },
   subtitle: {
-    fontSize: 18,
-    color: "#a42121cc",
+    fontSize: 16,
+    color: "#f3f4f6",
     textAlign: "center",
     marginBottom: 30,
-    textShadowColor: "#000",
+    lineHeight: 22,
   },
   button: {
     backgroundColor: "#a42121cc",
-    paddingVertical: 15,
+    paddingVertical: 14,
     paddingHorizontal: 40,
     borderRadius: 12,
     width: "100%",
+    marginBottom: 12,
+  },
+  logoutButton: {
+    backgroundColor: "#374151cc",
   },
   buttonText: {
-    color: "#fff",
-    fontSize: 18,
+    color: "#ffffff",
+    fontSize: 17,
     fontWeight: "700",
     textAlign: "center",
   },
