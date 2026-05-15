@@ -32,7 +32,8 @@ export async function apiFetch<T>(path: string, options: ApiOptions = {}): Promi
   try {
     data = (await response.json()) as ApiResponse<T>;
   } catch {
-    
+    // Ignora errores de parseo si no hay cuerpo o JSON inválido.
+  }
 
   if (!response.ok) {
     const message = data?.message || `Error ${response.status}`;
@@ -43,7 +44,5 @@ export async function apiFetch<T>(path: string, options: ApiOptions = {}): Promi
     throw new Error("Respuesta vacía del servidor");
   }
 
-  
   return data.object as T;
-}
 }
