@@ -1,31 +1,49 @@
-const API_BASE_URL = "http://192.168.X.Y:5000";
+import { API_BASE_URL } from "./constants";
 
-type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
+export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 
-export async function apiFetch<T>(
-  path: string,
-  options: { method?: HttpMethod; body?: unknown; token?: string | null } = {}
-): Promise<T> {
+export interface ApiOptions {
+  method?: HttpMethod;
+  body?: unknown;
+  token?: string | null;
+}
+
+
+export interface ApiResponse<T> {
+  message: string;
+  object: T | null;
+  statusCode: number;
+}
+
+
+export async function apiFetch<T>(path: string, options: ApiOptions = {}): Promise<T> {
   const { method = "GET", body, token } = options;
 
   const headers: Record<string, string> = { "Content-Type": "application/json" };
   if (token) headers["Authorization"] = `Bearer ${token}`;
 
-  const res = await fetch(`${API_BASE_URL}${path}`, {
+  const response = await fetch(`${API_BASE_URL}${path}`, {
     method,
     headers,
     body: body ? JSON.stringify(body) : undefined,
   });
 
-  let data: any = null;
+  let data: ApiResponse<T> | null = null;
   try {
-    data = await res.json();
-  } catch {}
+    data = (await response.json()) as ApiResponse<T>;
+  } catch {
+    
 
-  if (!res.ok) {
-    const msg = data?.message || `Error ${res.status}`;
-    throw new Error(msg);
+  if (!response.ok) {
+    const message = data?.message || `Error ${response.status}`;
+    throw new Error(message);
   }
 
-  return data as T;
+  if (!data) {
+    throw new Error("Respuesta vacía del servidor");
+  }
+
+  
+  return data.object as T;
+}
 }
