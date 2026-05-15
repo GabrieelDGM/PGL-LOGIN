@@ -81,3 +81,5 @@ Instalar Expo CLI global (opcional)
 
 Actualizar dependencias de Expo
 * npx expo install
+
+# GABRIEL DAVID GELVIZ MONTERREY 
