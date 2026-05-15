@@ -1,8 +1,19 @@
 import { useState } from "react";
-import { View, Text, TextInput, Alert, Pressable, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Pressable,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
 import { router } from "expo-router";
-import { register } from ".././src/services/authService";
-import { isValidEmail, isStrongPassword, notEmpty } from ".././src/services/validation";
+import { register } from "../src/services/authService";
+import {
+  isValidEmail,
+  isStrongPassword,
+  notEmpty,
+} from "../src/services/validation";
 
 export default function RegisterScreen() {
   const [fullname, setFullname] = useState("");
@@ -11,111 +22,161 @@ export default function RegisterScreen() {
   const [loading, setLoading] = useState(false);
 
   async function handleRegister() {
-    if (!notEmpty(fullname)) return Alert.alert("Validación", "El nombre no puede estar vacío");
-    if (!isValidEmail(email)) return Alert.alert("Validación", "Email no válido");
-    if (!isStrongPassword(pswd)) 
-      return Alert.alert("Validación", "Contraseña débil (mínimo 6 caracteres, mezcla letras y números)");
+    console.log("=== BOTÓN REGISTRO PULSADO ===");
+    console.log("Datos:", { fullname, email, pswd });
+
+    if (!notEmpty(fullname)) {
+      console.log("Nombre vacío");
+      window.alert("El nombre no puede estar vacío");
+      return;
+    }
+    if (!isValidEmail(email)) {
+      console.log("Email no válido");
+      window.alert("El email introducido no es válido");
+      return;
+    }
+    if (!isStrongPassword(pswd)) {
+      console.log("Contraseña débil");
+      window.alert(
+        "Contraseña débil: mínimo 6 caracteres con letras y números"
+      );
+      return;
+    }
 
     setLoading(true);
-
     try {
+      console.log("Llamando a register...");
       const res = await register({ fullname, email, pswd });
-
-      Alert.alert("Registro", "Registro exitoso. Bienvenido!");
-      router.replace("/tabs");
-    } catch (e: any) {
+      console.log("Registro OK:", res);
+      window.alert("Registro exitoso. Ahora puedes iniciar sesión");
+      router.replace("/login");
+    } catch (e) {
       console.log("Error en registro:", e);
-      Alert.alert("Registro", e.message || "Error en el registro");
+      const message = e instanceof Error ? e.message : String(e);
+      window.alert("Registro fallido: " + message);
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Registro de usuario</Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.card}>
+        <Text style={styles.title}>Crear cuenta</Text>
+        <Text style={styles.subtitle}>Rellena los datos para registrarte</Text>
 
-      <TextInput
-        placeholder="Nombre completo"
-        value={fullname}
-        onChangeText={setFullname}
-        style={styles.input}
-      />
+        <Text style={styles.label}>Nombre completo</Text>
+        <TextInput
+          placeholder="Nombre y apellidos"
+          value={fullname}
+          onChangeText={setFullname}
+          style={styles.input}
+        />
 
-      <TextInput
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-        style={styles.input}
-      />
+        <Text style={styles.label}>Email</Text>
+        <TextInput
+          placeholder="ejemplo@correo.com"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          style={styles.input}
+        />
 
-      <TextInput
-        placeholder="Contraseña"
-        value={pswd}
-        onChangeText={setPswd}
-        secureTextEntry
-        style={styles.input}
-      />
+        <Text style={styles.label}>Contraseña</Text>
+        <TextInput
+          placeholder="Mín. 6 caracteres con letras y números"
+          value={pswd}
+          onChangeText={setPswd}
+          secureTextEntry
+          style={styles.input}
+        />
 
-      {}
-      <Pressable style={styles.button} onPress={handleRegister} disabled={loading}>
-        <Text style={styles.buttonText}>
-          {loading ? "Registrando..." : "REGISTRARSE"}
-        </Text>
-      </Pressable>
+        <Pressable
+          style={styles.button}
+          onPress={handleRegister}
+          disabled={loading}
+        >
+          <Text style={styles.buttonText}>
+            {loading ? "Registrando..." : "Registrarme"}
+          </Text>
+        </Pressable>
 
-      {}
-      <Pressable style={styles.secondaryButton} onPress={() => router.push("/login")}>
-        <Text style={styles.secondaryButtonText}>
-          YA TENGO CUENTA, IR A LOGIN
-        </Text>
-      </Pressable>
-
-    </View>
+        <Pressable
+          style={styles.secondaryButton}
+          onPress={() => router.replace("/login")}
+        >
+          <Text style={styles.secondaryButtonText}>
+            Ya tengo cuenta, ir al login
+          </Text>
+        </Pressable>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
-    gap: 12,
+    flexGrow: 1,
+    justifyContent: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    backgroundColor: "#f5f6fa",
+  },
+  card: {
+    backgroundColor: "#ffffff",
+    borderRadius: 16,
+    padding: 24,
   },
   title: {
-    fontSize: 20,
+    fontSize: 26,
+    fontWeight: "800",
+    color: "#1f2937",
+    marginBottom: 4,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: "#6b7280",
+    marginBottom: 24,
+  },
+  label: {
+    fontSize: 13,
     fontWeight: "600",
-    marginBottom: 10,
-  },
-  input: {
-    borderWidth: 2,
-    borderColor: "red",
-    padding: 10,
-    borderRadius: 6,
-  },
-  button: {
-    backgroundColor: "red",
-    paddingVertical: 14,
-    borderRadius: 8,
-    alignItems: "center",
+    color: "#374151",
+    marginBottom: 6,
     marginTop: 10,
   },
+  input: {
+    borderWidth: 1,
+    borderColor: "#d1d5db",
+    backgroundColor: "#f9fafb",
+    padding: 12,
+    borderRadius: 10,
+    fontSize: 15,
+  },
+  button: {
+    backgroundColor: "#a42121",
+    paddingVertical: 14,
+    borderRadius: 10,
+    alignItems: "center",
+    marginTop: 20,
+  },
   buttonText: {
-    color: "white",
+    color: "#ffffff",
+    fontWeight: "700",
     fontSize: 16,
-    fontWeight: "bold",
   },
   secondaryButton: {
     paddingVertical: 12,
-    borderRadius: 8,
+    borderRadius: 10,
     alignItems: "center",
-    borderWidth: 2,
-    borderColor: "red",
-    marginTop: 5,
+    borderWidth: 1.5,
+    borderColor: "#a42121",
+    marginTop: 12,
   },
   secondaryButtonText: {
-    color: "red",
-    fontSize: 16,
+    color: "#a42121",
+    fontSize: 15,
     fontWeight: "600",
   },
 });

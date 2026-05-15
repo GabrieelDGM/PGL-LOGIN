@@ -12,18 +12,21 @@ export default function LoginScreen() {
   const [loading, setLoading] = useState(false);
 
   async function handleLogin(): Promise<void> {
-    if (!isValidEmail(email)) {
+    const normalizedEmail = email.trim().toLowerCase();
+    const normalizedPassword = pswd.trim();
+
+    if (!isValidEmail(normalizedEmail)) {
       Alert.alert("Login", "El email introducido no es válido");
       return;
     }
-    if (!notEmpty(pswd)) {
+    if (!notEmpty(normalizedPassword)) {
       Alert.alert("Login", "Introduce la contraseña");
       return;
     }
 
     setLoading(true);
     try {
-      const res = await login({ email, pswd });
+      const res = await login({ email: normalizedEmail, pswd: normalizedPassword });
       // La API devuelve { userId, email, token }
       await saveToken(res.token);
       Alert.alert("Login", "Inicio de sesión exitoso");
