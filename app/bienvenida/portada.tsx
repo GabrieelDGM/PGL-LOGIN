@@ -5,7 +5,6 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Alert,
   ActivityIndicator,
 } from "react-native";
 import { Link, router } from "expo-router";
@@ -27,41 +26,31 @@ export default function Portada() {
     })();
   }, []);
 
-  async function handleCheckToken(): Promise<void> {
+  async function handleCheckToken() {
     setLoadingMsg(true);
     try {
       const token = await getToken();
       if (!token) {
-        Alert.alert("Sesión", "No hay token. Vuelve a iniciar sesión");
+        window.alert("No hay token. Vuelve a iniciar sesión");
         router.replace("/login");
         return;
       }
       const message = await getWelcomeMessage(token);
-      Alert.alert("Mensaje del servidor", message);
+      window.alert(message);
     } catch (e) {
       const message = e instanceof Error ? e.message : String(e);
-      Alert.alert("Error", message || "No se pudo comprobar el token");
+      window.alert("Error: " + message);
     } finally {
       setLoadingMsg(false);
     }
   }
 
-  async function handleLogout(): Promise<void> {
-    Alert.alert(
-      "Cerrar sesión",
-      "¿Seguro que quieres cerrar sesión?",
-      [
-        { text: "Cancelar", style: "cancel" },
-        {
-          text: "Cerrar sesión",
-          style: "destructive",
-          onPress: async () => {
-            await removeToken();
-            router.replace("/login");
-          },
-        },
-      ]
-    );
+  async function handleLogout() {
+    const ok = window.confirm("¿Seguro que quieres cerrar sesión?");
+    if (ok) {
+      await removeToken();
+      router.replace("/login");
+    }
   }
 
   if (checking) {
@@ -140,9 +129,6 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     color: "#ffffff",
     textAlign: "center",
-    textShadowColor: "#000",
-    textShadowOffset: { width: 2, height: 2 },
-    textShadowRadius: 5,
     marginBottom: 12,
   },
   subtitle: {
