@@ -1,5 +1,5 @@
 # Ejercicio Tres
-## Pantalla de registro de usuario
+
 
 ## Objetivo
 El drawer (menú lateral) **solo debe estar accesible si hay token guardado**. Si no hay token, el usuario debe ser redirigido al login.
